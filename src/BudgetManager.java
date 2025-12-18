@@ -32,6 +32,10 @@ public class BudgetManager implements Summarizable {
         }
         return total;
     }
+    public void setTransactions(ArrayList<Transaction> newList) {
+    transactions = newList;
+}
+
 
     @Override
     public String summary() {
