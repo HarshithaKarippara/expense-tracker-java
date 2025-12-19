@@ -1,3 +1,4 @@
+
 public abstract class Transaction implements Summarizable {
     private String id;
     private String date;        // YYYY-MM-DD

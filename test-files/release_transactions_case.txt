@@ -1,0 +1,3 @@
+ONE|T200|2025-12-15|0.00|Misc|Free item
+ONE|T201|2025-12-16|-5.00|Refund|Returned item
+REC|R020|2025-12-01|0.01|Misc|Tiny charge|1

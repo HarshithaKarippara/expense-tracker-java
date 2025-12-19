@@ -1,181 +1,229 @@
-
----
-
-# 2️⃣ TEST_PLAN.md
-
-Last updated: December 2025
-
-
-```markdown
 # Test Plan – Personal Finance Expense Tracker
 
-## Test Environment
-- Java JDK 17
-- VS Code
-- Windows / macOS
+This test plan includes public tests (using the provided sample files) and release tests (additional instructor-style tests and edge cases). Each test case includes input, expected output, and actual results.
+
+> **How to run tests manually:** Compile and run the program:
+> ```bash
+> javac src/*.java
+> java -cp src ExpenseTrackerApp
+> ```
 
 ---
 
-## Test Case 1: Add One-Time Expense
-**Input**
-- Date: 2025-12-01
-- Amount: 15.50
-- Category: Food
-- Description: Lunch
+## Public Tests (Files included in repo)
 
-**Expected Output**
-- Expense is added and displayed in the list
-
-**Actual Result**
-- Expense added successfully and shown in expense list
+### Public Test Files
+These files are included in the repository for grading and repeatable testing:
+- `test-files/public_transactions.txt` (known-good file to load)
+- `test-files/public_transactions_empty.txt` (empty file)
+- `test-files/public_transactions_mixed.txt` (mixed one-time/recurring set)
 
 ---
 
-## Test Case 2: Add Recurring Expense
-**Input**
-- Date: 2025-12-01
-- Amount: 10.00
-- Category: Subscriptions
-- Description: Streaming Service
-- Interval: 1 month
+### Public Test 1: Load Known-Good File (public_transactions.txt)
+**Input (User Actions)**
+1. Choose **Load**
+2. Program loads from `test-files/transactions.txt` OR choose the file you set as your load path.
+3. (If your program loads a fixed path, copy `public_transactions.txt` to that path name before running.)
 
 **Expected Output**
-- Expense added
-- Projected 12-month cost = $120.00
+- Message confirms loaded successfully
+- Transactions list contains exactly the entries from the file
+- No crash, no missing transactions
 
-**Actual Result**
-- Expense added
-- Projected cost calculated correctly
+**Actual Results**
+- PASS (loaded correctly) / FAIL (describe what happened): ______________________
 
 ---
 
-## Test Case 3: Recursive Cost Calculation
-**Input**
-- Monthly recurring expense of $5 for 6 months
+### Public Test 2: List Expenses After Loading
+**Input (User Actions)**
+1. Load known-good file
+2. Choose **List Expenses**
 
 **Expected Output**
-- Total projected cost = $30.00
+- A scrollable list appears
+- Each transaction appears on its own line with correct ID/date/amount/category/description
 
-**Actual Result**
-- Recursive method returned correct total
+**Actual Results**
+- PASS / FAIL: ______________________
 
 ---
 
-## Test Case 4: Save Transactions
-**Input**
-- Save with existing expenses
+### Public Test 3: Summary After Loading
+**Input (User Actions)**
+1. Load known-good file
+2. Choose **Show Summary**
 
 **Expected Output**
-- Text file created with correct data
+- Summary shows correct number of transactions
+- Summary total matches sum of amounts in file
 
-**Actual Result**
-- File saved successfully
+**Actual Results**
+- PASS / FAIL: ______________________
 
 ---
 
-## Test Case 5: Load Transactions
-**Input**
-- Load previously saved file
+### Public Test 4: Save Then Load Round Trip
+**Input (User Actions)**
+1. Add a one-time expense:
+   - Date: 2025-12-01
+   - Amount: 15.50
+   - Category: Food
+   - Description: Lunch
+2. Add a recurring expense:
+   - Start date: 2025-12-01
+   - Amount: 10.00
+   - Category: Subscriptions
+   - Description: Music
+   - Interval months: 1
+3. Choose **Save**
+4. Close program
+5. Re-run program and choose **Load**
+6. Choose **List Expenses**
 
 **Expected Output**
-- Expenses restored correctly
+- The two expenses reappear exactly after load
+- No data corruption (same fields)
 
-**Actual Result**
-- Expenses loaded correctly
+**Actual Results**
+- PASS / FAIL: ______________________
 
 ---
 
-## Test Case 6: Invalid Numeric Input
-**Input**
-- Non-numeric value for amount
+## Release Tests (Additional grading/edge-case tests)
 
-**Expected Output**
-- Error message and reprompt
-
-**Actual Result**
-- User prompted again until valid input entered
- ---
-
-## Additional Test Cases
-
-### Test Case 7: Cancel Input Using Dialog
-**Input**
-- User clicks “Cancel” on an input dialog
-
-**Expected Output**
-- Program safely exits the current action or returns to menu without crashing
-
-**Actual Result**
-- (Fill after running)
+### Release Test Files
+These files are also included in the repo (instructor-style and edge cases):
+- `test-files/release_transactions_badformat.txt` (invalid lines)
+- `test-files/release_transactions_large.txt` (many entries)
+- `test-files/release_transactions_case.txt` (category capitalization variation)
 
 ---
 
-### Test Case 8: Negative Amount Entry
-**Input**
-- Amount entered: `-25`
+### Release Test 1: Cancel on Menu / Cancel During Input (GUI Robustness)
+**Input (User Actions)**
+1. Choose **Add One-Time Expense**
+2. When prompted for Date, click **Cancel**
 
 **Expected Output**
-- Error shown and user is prompted again
+- Program does not crash
+- Action is cancelled and returns to main menu (or shows “Action Cancelled” message)
 
-**Actual Result**
-- (Fill after running)
+**Actual Results**
+- PASS / FAIL: ______________________
 
 ---
 
-### Test Case 9: Interval Months = 0 for Recurring Expense
-**Input**
-- Interval months entered: `0`
+### Release Test 2: Negative Amount Validation
+**Input (User Actions)**
+1. Choose **Add One-Time Expense**
+2. Enter:
+   - Date: 2025-12-01
+   - Amount: -25
+   - Category: Food
+   - Description: Test
 
 **Expected Output**
-- Error shown and user is prompted again
+- Error message shown (“Enter a valid non-negative number.”)
+- User is prompted again until a valid amount is entered
 
-**Actual Result**
-- (Fill after running)
+**Actual Results**
+- PASS / FAIL: ______________________
 
 ---
 
-### Test Case 10: Empty List Summary
-**Input**
-- Choose “Show Summary” when no expenses exist
+### Release Test 3: Recurring Interval Validation (0 or negative)
+**Input (User Actions)**
+1. Choose **Add Recurring Expense**
+2. Enter:
+   - Start date: 2025-12-01
+   - Amount: 9.99
+   - Category: Subscriptions
+   - Description: Test
+   - Interval months: 0
 
 **Expected Output**
-- Summary shows 0 transactions and total $0.00 (or similar)
+- Error message shown (“Enter a valid positive integer.”)
+- User is prompted again until interval is valid
 
-**Actual Result**
-- (Fill after running)
+**Actual Results**
+- PASS / FAIL: ______________________
 
 ---
 
-### Test Case 11: Load When File Missing
-**Input**
-- Load when file does not exist
+### Release Test 4: Recursive Boundary Case (0 months)
+**Input (User Actions)**
+1. Add recurring expense with interval 1 and amount 10
+2. Trigger projection (if your program prints it automatically) OR verify by temporary debug print in code.
 
 **Expected Output**
-- Program does not crash; loads empty list and informs user
+- `projectedCost(0)` returns `0.0`
 
-**Actual Result**
-- (Fill after running)
+**Actual Results**
+- PASS / FAIL: ______________________
 
 ---
 
-### Test Case 12: Save Then Load Round Trip
-**Input**
-- Add 2 expenses → Save → Restart program → Load
+### Release Test 5: Load Missing File
+**Input (User Actions)**
+1. Ensure the load file path does not exist (rename it temporarily)
+2. Choose **Load**
 
 **Expected Output**
-- Same expenses restored exactly
+- No crash
+- Program loads empty list or shows a friendly message
 
-**Actual Result**
-- (Fill after running)
+**Actual Results**
+- PASS / FAIL: ______________________
 
 ---
 
-### Test Case 13: Recursive Boundary Case
-**Input**
-- Projected cost for `0` months
+### Release Test 6: Load File With Bad Format Lines (release_transactions_badformat.txt)
+**Input (Setup + Actions)**
+1. Copy `release_transactions_badformat.txt` to your program’s expected load path (or rename it to the load filename)
+2. Choose **Load**
+3. Choose **List Expenses**
 
 **Expected Output**
-- Result is `0.0`
+- Program does not crash
+- Invalid lines are ignored (or handled safely)
+- Valid lines still load
 
-**Actual Result**
-- (Fill after running)
+**Actual Results**
+- PASS / FAIL: ______________________
+
+---
+
+### Release Test 7: Large File Performance (release_transactions_large.txt)
+**Input (Setup + Actions)**
+1. Copy `release_transactions_large.txt` to the program load path
+2. Choose **Load**
+3. Choose **List Expenses** and **Show Summary**
+
+**Expected Output**
+- Program remains responsive
+- Summary totals correct
+- List shows all entries (scrollable)
+
+**Actual Results**
+- PASS / FAIL: ______________________
+
+---
+
+### Release Test 8: Category Case Handling (release_transactions_case.txt)
+**Input (Setup + Actions)**
+1. Load `release_transactions_case.txt`
+2. Use any feature that totals by category (if included) OR visually confirm all entries display correctly.
+
+**Expected Output**
+- Categories with different capitalization still behave correctly (no missing entries due to case mismatch)
+
+**Actual Results**
+- PASS / FAIL: ______________________
+
+---
+
+## Notes
+- Public tests are designed to be simple and repeatable for grading.
+- Release tests include edge cases that ensure robustness (bad input, cancel actions, missing files, and larger datasets).

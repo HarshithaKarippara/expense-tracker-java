@@ -1,3 +1,5 @@
+
+
 public class OneTimeExpense extends Transaction {
     public OneTimeExpense(String id, String date, double amount, String category, String description) {
         super(id, date, amount, category, description);
